@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { BackendService } from '../../core/backend.service';
 import {
     AddTicket,
@@ -34,7 +34,7 @@ export class TicketManagerEffects {
 
     @Effect()
     getTickets$ = this.actions$.pipe(
-        ofType(TicketManagerActionType.GetUsers),
+        ofType(TicketManagerActionType.GetTickets),
         switchMap(() => this.service.tickets()),
         map(
             tickets =>
@@ -49,6 +49,7 @@ export class TicketManagerEffects {
     addTicket$ = this.actions$.pipe(
         ofType(TicketManagerActionType.AddTicket),
         switchMap((action: AddTicket) => this.service.newTicket(action.payload)),
+        tap(ticket => console.log(ticket)),
         map(ticket => new TicketAdded({ ticket }))
     );
 }

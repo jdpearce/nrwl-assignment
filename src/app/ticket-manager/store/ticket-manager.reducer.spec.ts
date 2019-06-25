@@ -21,6 +21,8 @@ describe('ticketManagerReducer', () => {
         });
 
         const actual = ticketManagerReducer(state, action);
+        expect(actual.tickets.length).toBe(1);
         expect(actual.tickets[0]).toBe(ticket);
+        console.log(JSON.stringify(actual.tickets));
     });
 });

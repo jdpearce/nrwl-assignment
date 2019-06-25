@@ -34,7 +34,7 @@ export function ticketManagerReducer(
         case TicketManagerActionType.GetUsersSuccess: {
             return {
                 ...state,
-                users: action.payload.users,
+                users: [...action.payload.users],
                 usersLoadingStatus: LoadingStatus.Loaded
             };
         }
@@ -55,7 +55,7 @@ export function ticketManagerReducer(
         case TicketManagerActionType.GetTicketsSuccess: {
             return {
                 ...state,
-                tickets: action.payload.tickets,
+                tickets: [...action.payload.tickets],
                 ticketsLoadingStatus: LoadingStatus.Loaded
             };
         }
@@ -77,5 +77,4 @@ export function ticketManagerReducer(
         default:
             return state;
     }
-    return state;
 }
