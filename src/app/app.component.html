@@ -1,8 +1,11 @@
-<h2>Tickets</h2>
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <mat-icon class="icon" aria-hidden="false" aria-label="User icon">adb</mat-icon>
+        <a mat-button routerLink="/">Home</a>
+        <a mat-button routerLink="/ticket-manager">Ticket Manager</a>
+        <span class="spacer"></span>
+        <mat-icon class="icon" aria-hidden="false" aria-label="User icon">account_circle</mat-icon>
+    </mat-toolbar-row>
+</mat-toolbar>
 
-<ul>
-  <li *ngFor="let t of tickets|async">
-    Ticket: {{t.id}}, {{t.description}}
-  </li>
-</ul>
-
+<router-outlet></router-outlet>
