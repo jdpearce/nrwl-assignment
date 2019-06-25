@@ -1,0 +1,17 @@
+:host {
+    display: flex;
+    justify-content: center;
+}
+
+.ticket-detail-card {
+    margin: 3rem 0;
+    min-width: 75%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mat-card-content {
+    width: 100%;
+}

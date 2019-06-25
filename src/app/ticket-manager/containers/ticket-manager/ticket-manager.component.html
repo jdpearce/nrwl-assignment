@@ -1,0 +1,15 @@
+<mat-card class="ticket-manager-card">
+    <mat-card-title>Tickets</mat-card-title>
+    <mat-card-content>
+        <mat-spinner [class.show]="loading$ | async" [diameter]="30" [strokeWidth]="3"></mat-spinner>
+        <tm-ticket-table [tickets]="tickets$ | async"></tm-ticket-table>
+
+        <form [formGroup]="form">
+            <mat-form-field>
+                <mat-label>Create New Ticket</mat-label>
+                <input formControlName="description" matInput placeholder="Description" />
+            </mat-form-field>
+            <button mat-button (click)="addTicket()">Add</button>
+        </form>
+    </mat-card-content>
+</mat-card>

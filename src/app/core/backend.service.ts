@@ -1,24 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
-
-export type User = {
-    id: number;
-    name: string;
-};
-
-export type Ticket = {
-    id: number;
-    description: string;
-    assigneeId: number;
-    completed: boolean;
-};
+import { Ticket, User } from '../models';
 
 function randomDelay() {
     return Math.random() * 4000;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BackendService {
     storedTickets: Ticket[] = [
         {

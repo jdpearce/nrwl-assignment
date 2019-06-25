@@ -1,0 +1,15 @@
+<form [formGroup]="form">
+    <mat-form-field>
+        <mat-label>Id</mat-label>
+        <input matInput formControlName="id" />
+    </mat-form-field>
+    <mat-form-field>
+        <input formControlName="description" matInput placeholder="Description" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Assignee</mat-label>
+        <mat-select formControlName="assigneeId">
+            <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
