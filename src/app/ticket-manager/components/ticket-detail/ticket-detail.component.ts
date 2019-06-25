@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Ticket, User } from 'nrwl-assignment/src/app/models';
+import { Ticket, User } from '../../../models';
 
 @Component({
     selector: 'tm-ticket-detail',

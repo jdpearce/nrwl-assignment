@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { Ticket, User } from 'nrwl-assignment/src/app/models';
 import { Observable } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
+import { Ticket, User } from '../../../models';
 import { TicketManagerFeatureState } from '../../store/ticket-manager.reducer';
 import { getTickets, getUsers } from '../../store/ticket-manager.selectors';
 
