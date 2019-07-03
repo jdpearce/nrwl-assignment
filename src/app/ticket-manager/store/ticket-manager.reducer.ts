@@ -1,6 +1,7 @@
+import { Action, createReducer, on } from '@ngrx/store';
 import { Ticket, User } from '../../models';
 import { LoadingStatus } from '../../models/loading-status';
-import { TicketManagerActions, TicketManagerActionType } from './ticket-manager.actions';
+import * as TicketManagerActions from './ticket-manager.actions';
 
 export interface TicketManagerFeatureState {
     tickets: Ticket[];
@@ -20,61 +21,49 @@ export const initialTicketManagerFeatureState: TicketManagerFeatureState = {
     usersLoadingError: null
 };
 
-export function ticketManagerReducer(
-    state: TicketManagerFeatureState = initialTicketManagerFeatureState,
-    action: TicketManagerActions
-): TicketManagerFeatureState {
-    switch (action.type) {
-        case TicketManagerActionType.GetUsers: {
-            return {
-                ...state,
-                usersLoadingStatus: LoadingStatus.Loading
-            };
-        }
-        case TicketManagerActionType.GetUsersSuccess: {
-            return {
-                ...state,
-                users: [...action.payload.users],
-                usersLoadingStatus: LoadingStatus.Loaded
-            };
-        }
-        case TicketManagerActionType.GetUsersFailure: {
-            return {
-                ...state,
-                usersLoadingError: action.payload.error,
-                usersLoadingStatus: LoadingStatus.FailedToLoad
-            };
-        }
+const reducer = createReducer(
+    initialTicketManagerFeatureState,
+    on(TicketManagerActions.ticketAdded, (state, action) => ({
+        ...state,
+        tickets: [...state.tickets, action.ticket]
+    })),
+    on(TicketManagerActions.getUsers, state => ({
+        ...state,
+        usersLoadingStatus: LoadingStatus.Loading
+    })),
+    on(TicketManagerActions.getUsersSuccess, (state, action) => ({
+        ...state,
+        users: [...action.users],
+        usersLoadingStatus: LoadingStatus.Loaded
+    })),
+    on(TicketManagerActions.getTickets, state => ({
+        ...state,
+        ticketsLoadingStatus: LoadingStatus.Loading
+    })),
+    on(TicketManagerActions.getTicketsSuccess, (state, action) => ({
+        ...state,
+        tickets: [...action.tickets],
+        ticketsLoadingStatus: LoadingStatus.Loaded
+    })),
+    on(TicketManagerActions.getTicketsFailure, (state, action) => ({
+        ...state,
+        ticketsLoadingError: action.error,
+        ticketsLoadingStatus: LoadingStatus.FailedToLoad
+    })),
+    on(TicketManagerActions.ticketAdded, (state, action) => ({
+        ...state,
+        tickets: [...state.tickets, action.ticket]
+    })),
+    on(TicketManagerActions.ticketAssigned, (state, action) => {
+        let newTickets = [...state.tickets];
 
-        case TicketManagerActionType.GetTickets: {
-            return {
-                ...state,
-                ticketsLoadingStatus: LoadingStatus.Loading
-            };
-        }
-        case TicketManagerActionType.GetTicketsSuccess: {
-            return {
-                ...state,
-                tickets: [...action.payload.tickets],
-                ticketsLoadingStatus: LoadingStatus.Loaded
-            };
-        }
-        case TicketManagerActionType.GetTicketsFailure: {
-            return {
-                ...state,
-                ticketsLoadingError: action.payload.error,
-                ticketsLoadingStatus: LoadingStatus.FailedToLoad
-            };
-        }
+        const toUpdate = newTickets.findIndex(x => x.id === action.ticket.id);
+        newTickets[toUpdate] = action.ticket;
 
-        case TicketManagerActionType.TicketAdded: {
-            return {
-                ...state,
-                tickets: [...state.tickets, action.payload.ticket]
-            };
-        }
+        return { ...state, tickets: newTickets };
+    })
+);
 
-        default:
-            return state;
-    }
+export function ticketManagerReducer(state: TicketManagerFeatureState | undefined, action: Action): TicketManagerFeatureState {
+    return reducer(state, action);
 }

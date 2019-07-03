@@ -4,7 +4,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { BackendService } from '../../core/backend.service';
-import { GetUsers, GetUsersSuccess } from './ticket-manager.actions';
+import { getUsers, getUsersSuccess } from './ticket-manager.actions';
 import { TicketManagerEffects } from './ticket-manager.effects';
 import { TicketManagerFeatureState, ticketManagerReducer } from './ticket-manager.reducer';
 
@@ -31,7 +31,7 @@ describe('Ticket Manager Effects', () => {
 
     describe('getUsers$', () => {
         it('should emit a GetUsersSuccess action when the API returns', () => {
-            const action = new GetUsers();
+            const action = getUsers();
             const source = cold('a', { a: action });
             actions = source;
 
@@ -49,7 +49,7 @@ describe('Ticket Manager Effects', () => {
             spyOn(service, 'users').and.returnValue(of(users));
 
             const expected = cold('a', {
-                a: new GetUsersSuccess({
+                a: getUsersSuccess({
                     users
                 })
             });

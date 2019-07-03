@@ -1,4 +1,4 @@
-import { TicketAdded, TicketManagerActionType } from './ticket-manager.actions';
+import { ticketAdded } from './ticket-manager.actions';
 import { initialTicketManagerFeatureState, TicketManagerFeatureState, ticketManagerReducer } from './ticket-manager.reducer';
 
 describe('ticketManagerReducer', () => {
@@ -8,7 +8,7 @@ describe('ticketManagerReducer', () => {
         state = initialTicketManagerFeatureState;
     });
 
-    it(`should add a ticket to the collection on ${TicketManagerActionType.TicketAdded}`, () => {
+    it(`should add a ticket to the collection on ticketAdded`, () => {
         const ticket = {
             id: 1,
             description: 'new ticket',
@@ -16,13 +16,12 @@ describe('ticketManagerReducer', () => {
             completed: false
         };
 
-        const action = new TicketAdded({
+        const action = ticketAdded({
             ticket
         });
 
         const actual = ticketManagerReducer(state, action);
         expect(actual.tickets.length).toBe(1);
         expect(actual.tickets[0]).toBe(ticket);
-        console.log(JSON.stringify(actual.tickets));
     });
 });

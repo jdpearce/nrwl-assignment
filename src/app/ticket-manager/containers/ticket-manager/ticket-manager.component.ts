@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { LoadingStatus, Ticket } from '../../../models';
-import { AddTicket } from '../../store/ticket-manager.actions';
+import { addTicket } from '../../store/ticket-manager.actions';
 import { TicketManagerFeatureState } from '../../store/ticket-manager.reducer';
 import { getTickets, getTicketsLoadingStatus, getUsersLoadingStatus } from '../../store/ticket-manager.selectors';
 
@@ -41,7 +41,7 @@ export class TicketManagerComponent implements OnInit {
 
     addTicket(): void {
         if (this.form.valid) {
-            this.store.dispatch(new AddTicket(this.form.value));
+            this.store.dispatch(addTicket(this.form.value));
         }
     }
 }

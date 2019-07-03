@@ -4,14 +4,14 @@ import { TicketDetailCardComponent } from './containers/ticket-detail-card/ticke
 import { TicketManagerComponent } from './containers/ticket-manager/ticket-manager.component';
 import { DispatchActionGuard } from './guards/dispatch-action.guard';
 import { TicketExistsGuard } from './guards/ticket-exists.guard';
-import { GetTickets, GetUsers } from './store/ticket-manager.actions';
+import { getTickets, getUsers } from './store/ticket-manager.actions';
 
 const routes: Routes = [
     {
         path: '',
         canActivate: [DispatchActionGuard],
         data: {
-            guardActions: [new GetUsers(), new GetTickets()]
+            guardActions: [getUsers(), getTickets()]
         },
         children: [
             {

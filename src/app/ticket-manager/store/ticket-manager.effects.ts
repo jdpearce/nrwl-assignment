@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
 import { BackendService } from '../../core/backend.service';
 import {
-    AddTicket,
-    GetTicketsFailure,
-    GetTicketsSuccess,
-    GetUsersFailure,
-    GetUsersSuccess,
-    TicketAdded,
-    TicketManagerActionType
+    addTicket,
+    assignTicket,
+    getTickets,
+    getTicketsFailure,
+    getTicketsSuccess,
+    getUsers,
+    getUsersFailure,
+    getUsersSuccess,
+    ticketAdded,
+    ticketAssigned
 } from './ticket-manager.actions';
 
 @Injectable({
@@ -19,37 +22,45 @@ import {
 export class TicketManagerEffects {
     constructor(private actions$: Actions, private service: BackendService) {}
 
-    @Effect()
-    getUsers$ = this.actions$.pipe(
-        ofType(TicketManagerActionType.GetUsers),
-        switchMap(() => this.service.users()),
-        map(
-            users =>
-                new GetUsersSuccess({
+    getUsers$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(getUsers),
+            switchMap(() => this.service.users()),
+            map(users =>
+                getUsersSuccess({
                     users
                 })
-        ),
-        catchError(error => of(new GetUsersFailure({ error })))
+            ),
+            catchError(error => of(getUsersFailure({ error })))
+        )
     );
 
-    @Effect()
-    getTickets$ = this.actions$.pipe(
-        ofType(TicketManagerActionType.GetTickets),
-        switchMap(() => this.service.tickets()),
-        map(
-            tickets =>
-                new GetTicketsSuccess({
+    getTickets$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(getTickets),
+            switchMap(() => this.service.tickets()),
+            map(tickets =>
+                getTicketsSuccess({
                     tickets
                 })
-        ),
-        catchError(error => of(new GetTicketsFailure({ error })))
+            ),
+            catchError(error => of(getTicketsFailure({ error })))
+        )
     );
 
-    @Effect()
-    addTicket$ = this.actions$.pipe(
-        ofType(TicketManagerActionType.AddTicket),
-        switchMap((action: AddTicket) => this.service.newTicket(action.payload)),
-        tap(ticket => console.log(ticket)),
-        map(ticket => new TicketAdded({ ticket }))
+    addTicket$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(addTicket),
+            concatMap(action => this.service.newTicket(action)),
+            map(ticket => ticketAdded({ ticket }))
+        )
+    );
+
+    assignTicket$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(assignTicket),
+            concatMap(action => this.service.assign(action.ticketId, action.userId)),
+            map(ticket => ticketAssigned({ ticket }))
+        )
     );
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 import { Ticket, User } from '../models';
 
 function randomDelay() {
@@ -26,7 +26,7 @@ export class BackendService {
         }
     ];
 
-    storedUsers: User[] = [{ id: 111, name: 'Victor' }];
+    storedUsers: User[] = [{ id: 111, name: 'Victor' }, { id: 112, name: 'Bob' }, { id: 113, name: 'Alice' }];
 
     lastId = 1;
 
@@ -72,9 +72,7 @@ export class BackendService {
         if (foundTicket && user) {
             return of(foundTicket).pipe(
                 delay(randomDelay()),
-                tap((ticket: Ticket) => {
-                    ticket.assigneeId = +userId;
-                })
+                map((ticket: Ticket) => ({ ...ticket, assigneeId: +userId }))
             );
         }
 

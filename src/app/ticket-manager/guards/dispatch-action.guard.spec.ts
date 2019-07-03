@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Store, StoreModule } from '@ngrx/store';
-import { GetTickets } from '../store/ticket-manager.actions';
+import { getTickets } from '../store/ticket-manager.actions';
 import { TicketManagerFeatureState } from '../store/ticket-manager.reducer';
 import { DispatchActionGuard } from './dispatch-action.guard';
 
@@ -21,11 +21,12 @@ describe('DispatchActionGuard', () => {
 
     it('should dispatch action from store', () => {
         const route = new ActivatedRouteSnapshot();
+        const action = getTickets();
         spyOn(store, 'dispatch');
-        route.data = { guardActions: [new GetTickets()] };
+        route.data = { guardActions: [action] };
 
         const actual = guard.canActivate(route, null);
-        expect(store.dispatch).toHaveBeenCalledWith(new GetTickets());
+        expect(store.dispatch).toHaveBeenCalledWith(action);
         expect(actual).toBeTruthy();
     });
 });
